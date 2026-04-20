@@ -9,6 +9,7 @@
 #define AUTOSTART_KEY L"Software\\Microsoft\\Windows\\CurrentVersion\\Run"
 #define AUTOSTART_VALUE L"AutoMuteApp"
 #define AUTOSTART_TASK_NAME L"AutoMuteApp"
+#define IDI_TRAY_APP 101
 #define TRAY_CLASS_NAME L"AutoMuteAppHiddenWindow"
 #define WM_TRAYICON (WM_APP + 1)
 #define ID_TRAY_TOGGLE_PAUSE 1001
@@ -94,15 +95,26 @@ static int create_tray_icon(HWND hwnd)
     g_nid.uID = 1;
     g_nid.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP | NIF_SHOWTIP;
     g_nid.uCallbackMessage = WM_TRAYICON;
+    g_custom_tray_icon = (HICON)LoadImageW(
+        GetModuleHandleW(NULL),
+        MAKEINTRESOURCEW(IDI_TRAY_APP),
+        IMAGE_ICON,
+        0,
+        0,
+        LR_DEFAULTSIZE
+    );
+
     if (build_exe_dir_path(L"tray.ico", icon_path, MAX_PATH)) {
-        g_custom_tray_icon = (HICON)LoadImageW(
-            NULL,
-            icon_path,
-            IMAGE_ICON,
-            0,
-            0,
-            LR_LOADFROMFILE | LR_DEFAULTSIZE
-        );
+        if (!g_custom_tray_icon) {
+            g_custom_tray_icon = (HICON)LoadImageW(
+                NULL,
+                icon_path,
+                IMAGE_ICON,
+                0,
+                0,
+                LR_LOADFROMFILE | LR_DEFAULTSIZE
+            );
+        }
     }
 
     g_nid.hIcon = g_custom_tray_icon ? g_custom_tray_icon : LoadIconW(NULL, (LPCWSTR)IDI_APPLICATION);

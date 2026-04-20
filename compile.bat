@@ -32,4 +32,10 @@ if %ERRORLEVEL%==0 (
 	exit /b 1
 )
 
-gcc src/*.c -Iinclude -lole32 -luuid -lpropsys -lpsapi -ladvapi32 -mwindows -o AutoMuteApp.exe
+windres app.rc -O coff -o app.res
+if errorlevel 1 (
+	echo Failed to compile app.rc resource file.
+	exit /b 1
+)
+
+gcc src/*.c app.res -Iinclude -lole32 -luuid -lpropsys -lpsapi -ladvapi32 -mwindows -o AutoMuteApp.exe
