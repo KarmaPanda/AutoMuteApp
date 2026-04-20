@@ -114,8 +114,15 @@ static int create_tray_icon(HWND hwnd)
     }
 
     g_tray_icon_added = 1;
-    g_nid.uVersion = NOTIFYICON_VERSION_4;
+    g_nid.uVersion = NOTIFYICON_VERSION;
     Shell_NotifyIconW(NIM_SETVERSION, &g_nid);
+
+    /* Re-apply tooltip text explicitly to ensure hover text appears reliably. */
+    g_nid.uFlags = NIF_TIP;
+    Shell_NotifyIconW(NIM_MODIFY, &g_nid);
+
+    /* Restore full flag set for subsequent operations. */
+    g_nid.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP | NIF_SHOWTIP;
     return 1;
 }
 
