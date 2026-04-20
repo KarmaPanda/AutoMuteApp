@@ -1,12 +1,18 @@
 {
   "poll_interval_ms": 2000,
-  "target_application": "Discord.exe",
+  "autostart": true,
+  "target_applications": [
+    "Discord.exe",
+    "parsecd.exe",
+    "Teams.exe",
+    "chrome.exe"
+  ],
   "devices": [
     {
       "name_contains": "SteelSeries Sonar - Microphone"
     },
     {
-      "name_contains": "Arctis 7P+"
+      "name_contains": "Arctis Nova Pro Wireless"
     }
   ]
 }
